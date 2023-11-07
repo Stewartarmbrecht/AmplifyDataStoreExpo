@@ -14,17 +14,21 @@ import { Post } from './src/models';
 import { PostStatus } from './src/models';
 
 export default function App() {
-  const [post, setPost] = useState<Post>();
+  const [post, setPost] = useState<Post | null>(null);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [title, setTitle] = useState<string>('');
   useEffect(() => {
-    /**
-     * This keeps `post` fresh.
-     */
-    const sub = DataStore.observeQuery(Post, (c) =>
-      c.id.eq(post?.id)
-    ).subscribe(({ items }) => {
-      setPost(items[0]);
-    });
+    let sub = null;
+    if (post) {
+      /**
+       * This keeps `post` fresh.
+       */
+      sub = DataStore.observeQuery(Post, (c) =>
+        c.id.eq(post.id)
+      ).subscribe(({ items }) => {
+        setPost(items[0]);
+      });
+    }
 
     const allPostsSub = DataStore.observeQuery(
       Post
@@ -37,7 +41,9 @@ export default function App() {
     console.log('Subscribed');
 
     return () => {
-      sub.unsubscribe();
+      if (sub) {
+        sub.unsubscribe();
+      }
       allPostsSub.unsubscribe();
     };
   }, []);
@@ -45,33 +51,49 @@ export default function App() {
   /**
    * Create a new Post
    */
-  async function onCreate() {
-    const _post = await DataStore.save(
-      new Post({
-        title: `New title ${Date.now()}`,
-        rating: Math.floor(Math.random() * (8 - 1) + 1),
-        status: PostStatus.ACTIVE
-      })
-    );
-    setPost(_post);
-    console.log('Created', _post);
+  async function onSave() {
+    if (!post) {
+      const _post = await DataStore.save(
+        new Post({
+          title: title,
+          rating: Math.floor(Math.random() * (8 - 1) + 1),
+          status: PostStatus.ACTIVE
+        })
+      );
+      setPost(null);
+      setTitle('');
+      console.log('Created', _post);
+    } else {
+      const updatedPost = Post.copyOf(post, (draft) => {
+        draft.title = title;
+      });
+      const savedPost = await DataStore.save(updatedPost);
+      console.log('Post saved: ', savedPost);
+      setPost(null);
+      setTitle('');
+    }
   }
 
   async function onSelect(id) {
     const selected = await DataStore.query(Post, id);
     setPost(selected);
+    setTitle(selected.title)
     console.log('Selected', id);
   }
 
   async function onDelete(id) {
     const toDelete = await DataStore.query(Post, id);
     await DataStore.delete(toDelete);
+    setPost(null);
+    setTitle('');
     console.log('Deleted', id);
   }
 
   async function onClear() {
     await DataStore.clear();
     setAllPosts([]);
+    setPost(null);
+    setTitle('');
     console.log('Cleared');
   }
 
@@ -138,38 +160,23 @@ export default function App() {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={styles.container}>
           <View style={styles.selectedName}>
-            <Text>{post?.title}</Text>
+            <Text>{post?.title ?? 'New Task'}</Text>
           </View>
-          <Pressable onPress={onCreate} style={styles.primaryButton}><Text>Create</Text></Pressable>
+          <View style={[styles.container, { flexDirection: "row" }]}>
+            <Text>Id: {post?.id}</Text>
+          </View>
           <View style={[styles.container, { flexDirection: "row" }]}>
             <Text>Name: </Text>
             <TextInput
               style={styles.input}
-              value={post?.title ?? ''}
-              onChangeText={(text) => {
-                /**
-                 * Each keypress updates the post in local React state.
-                 */
-                setPost(
-                  Post.copyOf(post, (draft) => {
-                    draft.title = text;
-                  })
-                );
-              }}
+              value={title}
+              placeholder='Enter a new task...'
+              onChangeText={setTitle}
             />
           </View>
           <Pressable
-            disabled={!post}
-            onPress={async () => {
-              /**
-               * This post is already up-to-date because `observeQuery` updated it.
-               */
-              if (!post) {
-                return;
-              }
-              const savedPost = await DataStore.save(post);
-              console.log('Post saved: ', savedPost);
-            }}
+            disabled={(title?.length ?? 0) === 0}
+            onPress={onSave}
             style={styles.button}
           >
             <Text>Save</Text>
@@ -191,7 +198,7 @@ export default function App() {
           )) : null}
         </View>
         <View style={styles.container}>
-          <Pressable onPress={() => onClear()} style={styles.button}>
+          <Pressable onPress={onClear} style={styles.button}>
             <Text>Clear</Text>
           </Pressable>
         </View>
