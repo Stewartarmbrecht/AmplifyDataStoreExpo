@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+	"appPort": [
+		// "10.24.1.58:19000:19000",
+		// "10.24.1.58:19001:19001",
+		// "10.24.1.58:19002:19002",
+		// "10.24.1.58:19006:19006",
+		"10.24.1.57:8281:8281",
+		"10.24.1.57:9288:9288",
+		"10.24.1.57:9289:9289",
+		"10.24.1.57:19200:19200",
+		"10.24.1.57:19201:19201",
+		"10.24.1.57:19202:19202",
+		"10.24.1.57:19206:19206"
+		// "192.168.7.193:8081:8081",
+		// "192.168.7.193:9088:9088",
+		// "192.168.7.193:9089:9089",
+		// "192.168.7.193:19000:19000",
+		// "192.168.7.193:19001:19001",
+		// "192.168.7.193:19002:19002",
+		// "192.168.7.193:19006:19006"
+		// "172.20.10.198:19000:19000",
+		// "172.20.10.198:19001:19001",
+		// "172.20.10.198:19002:19002",
+		// "172.20.10.198:19006:19006"
+	  ]
+	}

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "REACT_NATIVE_PACKAGER_HOSTNAME=10.24.1.57 npx expo start",
+    "start": "REACT_NATIVE_PACKAGER_HOSTNAME=10.24.1.57 npx expo start --port=19200",
     "android": "expo start --android",
     "ios": "REACT_NATIVE_PACKAGER_HOSTNAME=10.24.1.57 npx expo start --ios",
     "web": "expo start --web",
