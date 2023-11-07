@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-amplify/datastore-storage-adapter": "^2.0.49",
+    "@aws-amplify/ui-react-native": "^1.2.28",
     "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-native-community/netinfo": "^9.3.10",
@@ -26,6 +27,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "^0.72.6",
+    "react-native-get-random-values": "^1.9.0",
+    "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "^0.19.9",
     "typescript": "^5.1.3"
   },
