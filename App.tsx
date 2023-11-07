@@ -18,9 +18,9 @@ DataStore.configure({
 // substitute for a similar mechanism in your application lifecycle with
 // other frameworks.
 
-export default App = () => {
-  const [post, setPost] = useState();
-  const [allPosts, setAllPosts] = useState([]);
+export default function App() {
+  const [post, setPost] = useState<Post>();
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     /**
@@ -150,7 +150,6 @@ export default App = () => {
             <Text>Name: </Text>
             <TextInput
               style={styles.input}
-              disabled={!post}
               value={post?.title ?? ''}
               onChangeText={(text) => {
                 /**
