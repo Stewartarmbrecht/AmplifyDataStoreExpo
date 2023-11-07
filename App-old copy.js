@@ -1,21 +1,27 @@
-import 'core-js/full/symbol/async-iterator';
-import React, { useEffect, useState } from 'react';
 import { Amplify } from '@aws-amplify/core';
-import awsconfig from './src/aws-exports';
-Amplify.configure(awsconfig);
 import { DataStore } from '@aws-amplify/datastore';
 import { ExpoSQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/ExpoSQLiteAdapter';
+import { useEffect, useState } from 'react';
+import { Post, PostStatus } from './src/models';
+import { Date, Math } from 'core-js';
+import { SafeAreaView, StatusBar, ScrollView, View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+
+import awsconfig from './src/aws-exports';
+Amplify.configure(awsconfig);
+
 DataStore.configure({
   storageAdapter: ExpoSQLiteAdapter
 });
 
-import { SafeAreaView, StatusBar, View, Text, ScrollView, StyleSheet, Pressable, TextInput } from "react-native";
-import { Post } from './src/models';
-import { PostStatus } from './src/models';
+// Example showing how to observe the model and keep state updated before
+// performing a save. This uses the useEffect React hook, but you can
+// substitute for a similar mechanism in your application lifecycle with
+// other frameworks.
 
-export default function App() {
+export default App = () => {
   const [post, setPost] = useState<Post>();
   const [allPosts, setAllPosts] = useState<Post[]>([]);
+
   useEffect(() => {
     /**
      * This keeps `post` fresh.
@@ -116,7 +122,6 @@ export default function App() {
       borderRadius: 10,
       padding: 5,
       margin: 5,
-      flex: 1,
     },
     itemName: {
       borderWidth: 0,
