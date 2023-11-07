@@ -12,11 +12,25 @@ DataStore.configure({
 import { SafeAreaView, StatusBar, View, Text, ScrollView, StyleSheet, Pressable, TextInput } from "react-native";
 import { Post } from './src/models';
 import { PostStatus } from './src/models';
+import { withAuthenticator, useAuthenticator } from '@aws-amplify/ui-react-native';
 
-export default function App() {
+const App = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [title, setTitle] = useState<string>('');
+
+  // retrieves only the current value of 'user' from 'useAuthenticator'
+  const userSelector = (context) => [context.user]
+
+  const SignOutButton = () => {
+    const { user, signOut } = useAuthenticator(userSelector);
+    return (
+      <Pressable onPress={signOut} style={styles.button}>
+        <Text>Hello, {user?.username}! Click here to sign out!</Text>
+      </Pressable>
+    )
+  };
+
   useEffect(() => {
     let sub = null;
     if (post) {
@@ -159,6 +173,7 @@ export default function App() {
       <StatusBar />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={styles.container}>
+          <SignOutButton />
           <View style={styles.selectedName}>
             <Text>{post?.title ?? 'New Task'}</Text>
           </View>
@@ -206,3 +221,5 @@ export default function App() {
     </SafeAreaView>
   );
 };
+
+export default withAuthenticator(App);
