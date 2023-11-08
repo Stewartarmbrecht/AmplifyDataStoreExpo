@@ -1,1 +1,1 @@
-# AmplifyDataStoreExpo
+# my-sample

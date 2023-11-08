@@ -19,6 +19,7 @@ import { SafeAreaView, StatusBar, View, Text, ScrollView, StyleSheet, Pressable,
 import { Activity } from './src/models';
 import { ActivityStatus } from './src/models';
 import { withAuthenticator, useAuthenticator } from '@aws-amplify/ui-react-native';
+import { helloWorld } from '@my-sample/my-package';
 
 const App = () => {
   const [activity, setActivity] = useState<Activity | null>(null);
@@ -181,6 +182,9 @@ const App = () => {
       <StatusBar />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={styles.container}>
+          <View style={styles.selectedName}>
+            <Text>{helloWorld('Monorepo')}</Text>
+          </View>
           <SignOutButton />
           <View style={styles.selectedName}>
             <Text>{activity?.title ?? 'New Task'}</Text>

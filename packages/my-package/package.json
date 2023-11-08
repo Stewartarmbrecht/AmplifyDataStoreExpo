@@ -1,0 +1,13 @@
+{
+  "name": "@my-sample/my-package",
+  "version": "1.0.0",
+  "description": "sample package for mono-repo",
+  "main": "index.ts",
+  "author": "Stewart Armbrecht",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "yarn@4.0.1",
+  "dependencies": {
+    "typescript": "^5.2.2"
+  }
+}

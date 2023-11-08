@@ -1,0 +1,47 @@
+{
+  "name": "@my-sample/my-app",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "REACT_NATIVE_PACKAGER_HOSTNAME=10.24.1.57 npx expo start --port=19200",
+    "android": "expo start --android",
+    "ios": "REACT_NATIVE_PACKAGER_HOSTNAME=10.24.1.57 npx expo start --ios",
+    "web": "expo start --web",
+    "amplify-modelgen": "node amplify/scripts/amplify-modelgen.js",
+    "amplify-push": "node amplify/scripts/amplify-push.js"
+  },
+  "dependencies": {
+    "@aws-amplify/datastore-storage-adapter": "^2.0.49",
+    "@aws-amplify/ui-react-native": "^1.2.28",
+    "@expo/webpack-config": "^19.0.0",
+    "@my-sample/my-package": "*",
+    "@react-native-async-storage/async-storage": "^1.18.2",
+    "@react-native-community/netinfo": "^9.3.10",
+    "@types/react": "~18.2.14",
+    "amazon-cognito-identity-js": "^6.3.7",
+    "aws-amplify": "^5.3.12",
+    "core-js": "^3.33.2",
+    "expo": "~49.0.15",
+    "expo-file-system": "~15.4.4",
+    "expo-sqlite": "~11.3.3",
+    "expo-status-bar": "~1.6.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "^0.72.6",
+    "react-native-get-random-values": "^1.9.0",
+    "react-native-safe-area-context": "^4.7.4",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-web": "^0.19.9",
+    "typescript": "^5.1.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "ini": "^1.3.8",
+    "inquirer": "^6.5.2"
+  },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
+  "private": true,
+  "packageManager": "yarn@4.0.1"
+}
