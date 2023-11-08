@@ -1,8 +1,14 @@
 import 'core-js/full/symbol/async-iterator';
 import React, { useEffect, useState } from 'react';
 import { Amplify } from '@aws-amplify/core';
+import { AuthModeStrategyType } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
-Amplify.configure(awsconfig);
+Amplify.configure({
+  ...awsconfig,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH
+  }
+})
 import { DataStore } from '@aws-amplify/datastore';
 import { ExpoSQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/ExpoSQLiteAdapter';
 DataStore.configure({
@@ -10,13 +16,13 @@ DataStore.configure({
 });
 
 import { SafeAreaView, StatusBar, View, Text, ScrollView, StyleSheet, Pressable, TextInput } from "react-native";
-import { Post } from './src/models';
-import { PostStatus } from './src/models';
+import { Activity } from './src/models';
+import { ActivityStatus } from './src/models';
 import { withAuthenticator, useAuthenticator } from '@aws-amplify/ui-react-native';
 
 const App = () => {
-  const [post, setPost] = useState<Post | null>(null);
-  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [activity, setActivity] = useState<Activity | null>(null);
+  const [allActivitys, setAllActivitys] = useState<Activity[]>([]);
   const [title, setTitle] = useState<string>('');
 
   // retrieves only the current value of 'user' from 'useAuthenticator'
@@ -33,22 +39,22 @@ const App = () => {
 
   useEffect(() => {
     let sub = null;
-    if (post) {
+    if (activity) {
       /**
-       * This keeps `post` fresh.
+       * This keeps `activity` fresh.
        */
-      sub = DataStore.observeQuery(Post, (c) =>
-        c.id.eq(post.id)
+      sub = DataStore.observeQuery(Activity, (c) =>
+        c.id.eq(activity.id)
       ).subscribe(({ items }) => {
-        setPost(items[0]);
+        setActivity(items[0]);
       });
     }
 
-    const allPostsSub = DataStore.observeQuery(
-      Post
+    const allActivitysSub = DataStore.observeQuery(
+      Activity
     ).subscribe(snapshot => {
       const { items, isSynced } = snapshot;
-      setAllPosts(items);
+      setAllActivitys(items);
       console.log(`[Snapshot] item count: ${items.length}, isSynced: ${isSynced}`);
     });
 
@@ -58,55 +64,57 @@ const App = () => {
       if (sub) {
         sub.unsubscribe();
       }
-      allPostsSub.unsubscribe();
+      allActivitysSub.unsubscribe();
     };
   }, []);
 
   /**
-   * Create a new Post
+   * Create a new Activity
    */
   async function onSave() {
-    if (!post) {
-      const _post = await DataStore.save(
-        new Post({
+    console.log('Saving', activity);
+    if (!activity) {
+      const _activity = await DataStore.save(
+        new Activity({
           title: title,
           rating: Math.floor(Math.random() * (8 - 1) + 1),
-          status: PostStatus.ACTIVE
+          status: ActivityStatus.ACTIVE
         })
       );
-      setPost(null);
+      console.log('Saved', _activity);
+      setActivity(null);
       setTitle('');
-      console.log('Created', _post);
+      console.log('Created', _activity);
     } else {
-      const updatedPost = Post.copyOf(post, (draft) => {
+      const updatedActivity = Activity.copyOf(activity, (draft) => {
         draft.title = title;
       });
-      const savedPost = await DataStore.save(updatedPost);
-      console.log('Post saved: ', savedPost);
-      setPost(null);
+      const savedActivity = await DataStore.save(updatedActivity);
+      console.log('Activity saved: ', savedActivity);
+      setActivity(null);
       setTitle('');
     }
   }
 
   async function onSelect(id) {
-    const selected = await DataStore.query(Post, id);
-    setPost(selected);
+    const selected = await DataStore.query(Activity, id);
+    setActivity(selected);
     setTitle(selected.title)
     console.log('Selected', id);
   }
 
   async function onDelete(id) {
-    const toDelete = await DataStore.query(Post, id);
+    const toDelete = await DataStore.query(Activity, id);
     await DataStore.delete(toDelete);
-    setPost(null);
+    setActivity(null);
     setTitle('');
     console.log('Deleted', id);
   }
 
   async function onClear() {
     await DataStore.clear();
-    setAllPosts([]);
-    setPost(null);
+    setAllActivitys([]);
+    setActivity(null);
     setTitle('');
     console.log('Cleared');
   }
@@ -175,10 +183,10 @@ const App = () => {
         <View style={styles.container}>
           <SignOutButton />
           <View style={styles.selectedName}>
-            <Text>{post?.title ?? 'New Task'}</Text>
+            <Text>{activity?.title ?? 'New Task'}</Text>
           </View>
           <View style={[styles.container, { flexDirection: "row" }]}>
-            <Text>Id: {post?.id}</Text>
+            <Text>Id: {activity?.id}</Text>
           </View>
           <View style={[styles.container, { flexDirection: "row" }]}>
             <Text>Name: </Text>
@@ -198,7 +206,7 @@ const App = () => {
           </Pressable>
         </View>
         <View style={styles.container}>
-          {allPosts ? allPosts.map((p) => (
+          {allActivitys ? allActivitys.map((p) => (
             <View style={{ flexDirection: "row" }} key={p.id}>
               <Pressable onPress={() => onSelect(p.id)} style={styles.selectButton}>
                 <Text>Select</Text>

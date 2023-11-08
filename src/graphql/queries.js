@@ -1,9 +1,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
+export const getActivity = /* GraphQL */ `
+  query GetActivity($id: ID!) {
+    getActivity(id: $id) {
       id
       title
       status
@@ -14,17 +14,18 @@ export const getPost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
 `;
-export const listPosts = /* GraphQL */ `
-  query ListPosts(
-    $filter: ModelPostFilterInput
+export const listActivities = /* GraphQL */ `
+  query ListActivities(
+    $filter: ModelActivityFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listActivities(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         title
@@ -36,6 +37,7 @@ export const listPosts = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken
@@ -44,14 +46,14 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
-export const syncPosts = /* GraphQL */ `
-  query SyncPosts(
-    $filter: ModelPostFilterInput
+export const syncActivities = /* GraphQL */ `
+  query SyncActivities(
+    $filter: ModelActivityFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncPosts(
+    syncActivities(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -68,6 +70,7 @@ export const syncPosts = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
         __typename
       }
       nextToken

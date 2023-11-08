@@ -1,9 +1,12 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreatePost = /* GraphQL */ `
-  subscription OnCreatePost($filter: ModelSubscriptionPostFilterInput) {
-    onCreatePost(filter: $filter) {
+export const onCreateActivity = /* GraphQL */ `
+  subscription OnCreateActivity(
+    $filter: ModelSubscriptionActivityFilterInput
+    $owner: String
+  ) {
+    onCreateActivity(filter: $filter, owner: $owner) {
       id
       title
       status
@@ -14,13 +17,17 @@ export const onCreatePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
 `;
-export const onUpdatePost = /* GraphQL */ `
-  subscription OnUpdatePost($filter: ModelSubscriptionPostFilterInput) {
-    onUpdatePost(filter: $filter) {
+export const onUpdateActivity = /* GraphQL */ `
+  subscription OnUpdateActivity(
+    $filter: ModelSubscriptionActivityFilterInput
+    $owner: String
+  ) {
+    onUpdateActivity(filter: $filter, owner: $owner) {
       id
       title
       status
@@ -31,13 +38,17 @@ export const onUpdatePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
 `;
-export const onDeletePost = /* GraphQL */ `
-  subscription OnDeletePost($filter: ModelSubscriptionPostFilterInput) {
-    onDeletePost(filter: $filter) {
+export const onDeleteActivity = /* GraphQL */ `
+  subscription OnDeleteActivity(
+    $filter: ModelSubscriptionActivityFilterInput
+    $owner: String
+  ) {
+    onDeleteActivity(filter: $filter, owner: $owner) {
       id
       title
       status
@@ -48,6 +59,7 @@ export const onDeletePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }

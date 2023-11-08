@@ -1,12 +1,12 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createPost = /* GraphQL */ `
-  mutation CreatePost(
-    $input: CreatePostInput!
-    $condition: ModelPostConditionInput
+export const createActivity = /* GraphQL */ `
+  mutation CreateActivity(
+    $input: CreateActivityInput!
+    $condition: ModelActivityConditionInput
   ) {
-    createPost(input: $input, condition: $condition) {
+    createActivity(input: $input, condition: $condition) {
       id
       title
       status
@@ -17,16 +17,17 @@ export const createPost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
 `;
-export const updatePost = /* GraphQL */ `
-  mutation UpdatePost(
-    $input: UpdatePostInput!
-    $condition: ModelPostConditionInput
+export const updateActivity = /* GraphQL */ `
+  mutation UpdateActivity(
+    $input: UpdateActivityInput!
+    $condition: ModelActivityConditionInput
   ) {
-    updatePost(input: $input, condition: $condition) {
+    updateActivity(input: $input, condition: $condition) {
       id
       title
       status
@@ -37,16 +38,17 @@ export const updatePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }
 `;
-export const deletePost = /* GraphQL */ `
-  mutation DeletePost(
-    $input: DeletePostInput!
-    $condition: ModelPostConditionInput
+export const deleteActivity = /* GraphQL */ `
+  mutation DeleteActivity(
+    $input: DeleteActivityInput!
+    $condition: ModelActivityConditionInput
   ) {
-    deletePost(input: $input, condition: $condition) {
+    deleteActivity(input: $input, condition: $condition) {
       id
       title
       status
@@ -57,6 +59,7 @@ export const deletePost = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
       __typename
     }
   }

@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Post": {
-            "name": "Post",
+        "Activity": {
+            "name": "Activity",
             "fields": {
                 "id": {
                     "name": "id",
@@ -21,7 +21,7 @@ export const schema = {
                     "name": "status",
                     "isArray": false,
                     "type": {
-                        "enum": "PostStatus"
+                        "enum": "ActivityStatus"
                     },
                     "isRequired": true,
                     "attributes": []
@@ -58,7 +58,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Posts",
+            "pluralName": "Activities",
             "attributes": [
                 {
                     "type": "model",
@@ -69,7 +69,10 @@ export const schema = {
                     "properties": {
                         "rules": [
                             {
-                                "allow": "public",
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
+                                "identityClaim": "cognito:username",
                                 "operations": [
                                     "create",
                                     "update",
@@ -84,8 +87,8 @@ export const schema = {
         }
     },
     "enums": {
-        "PostStatus": {
-            "name": "PostStatus",
+        "ActivityStatus": {
+            "name": "ActivityStatus",
             "values": [
                 "ACTIVE",
                 "INACTIVE"
@@ -94,5 +97,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "c8f7b72ad6040a2f04d1500f59aa83e0"
+    "version": "86b32cb322f68c5c0dc174fe16382dc8"
 };
