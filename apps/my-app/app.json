@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AmplifyDataStoreExpo",
-    "slug": "AmplifyDataStoreExpo",
+    "name": "my-sample-my-app",
+    "slug": "my-sample-my-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
