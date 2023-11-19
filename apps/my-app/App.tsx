@@ -15,16 +15,16 @@ DataStore.configure({
   storageAdapter: ExpoSQLiteAdapter
 });
 
-import { SafeAreaView, StatusBar, View, Text, ScrollView, StyleSheet, Pressable, TextInput } from "react-native";
+import { SafeAreaView, StatusBar, View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
 import { Activity } from './src/models';
 import { ActivityStatus } from './src/models';
 import { withAuthenticator, useAuthenticator } from '@aws-amplify/ui-react-native';
 import { helloWorld } from '@my-sample/my-package';
+import TaskList from './TaskList';
 
 const App = () => {
   const [activity, setActivity] = useState<Activity | null>(null);
   const [allActivitys, setAllActivitys] = useState<Activity[]>([]);
-  const [title, setTitle] = useState<string>('');
 
   // retrieves only the current value of 'user' from 'useAuthenticator'
   const userSelector = (context) => [context.user]
@@ -72,9 +72,9 @@ const App = () => {
   /**
    * Create a new Activity
    */
-  async function onSave() {
+  async function onSave(title: string, id?: string) {
     console.log('Saving', activity);
-    if (!activity) {
+    if (!id) {
       const _activity = await DataStore.save(
         new Activity({
           title: title,
@@ -84,31 +84,28 @@ const App = () => {
       );
       console.log('Saved', _activity);
       setActivity(null);
-      setTitle('');
       console.log('Created', _activity);
     } else {
-      const updatedActivity = Activity.copyOf(activity, (draft) => {
+      const toUpdate = await DataStore.query(Activity, id);
+      const updatedActivity = Activity.copyOf(toUpdate, (draft) => {
         draft.title = title;
       });
       const savedActivity = await DataStore.save(updatedActivity);
       console.log('Activity saved: ', savedActivity);
       setActivity(null);
-      setTitle('');
     }
   }
 
-  async function onSelect(id) {
+  async function onSelect(id: string) {
     const selected = await DataStore.query(Activity, id);
     setActivity(selected);
-    setTitle(selected.title)
     console.log('Selected', id);
   }
 
-  async function onDelete(id) {
+  async function onDelete(id: string) {
     const toDelete = await DataStore.query(Activity, id);
     await DataStore.delete(toDelete);
     setActivity(null);
-    setTitle('');
     console.log('Deleted', id);
   }
 
@@ -116,7 +113,6 @@ const App = () => {
     await DataStore.clear();
     setAllActivitys([]);
     setActivity(null);
-    setTitle('');
     console.log('Cleared');
   }
 
@@ -124,47 +120,10 @@ const App = () => {
     container: {
       padding: 10,
     },
-    deleteButton: {
-      backgroundColor: "red",
-      color: "white",
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 5,
-      margin: 5,
-    },
-    selectButton: {
-      backgroundColor: "yellow",
-      color: "black",
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 5,
-      margin: 5,
-    },
     button: {
       backgroundColor: "blue",
       color: "white",
       borderWidth: 1,
-      borderRadius: 10,
-      padding: 5,
-      margin: 5,
-    },
-    primaryButton: {
-      backgroundColor: "green",
-      color: "white",
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 5,
-      margin: 5,
-    },
-    input: {
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 5,
-      margin: 5,
-      flex: 1,
-    },
-    itemName: {
-      borderWidth: 0,
       borderRadius: 10,
       padding: 5,
       margin: 5,
@@ -186,49 +145,15 @@ const App = () => {
             <Text>{helloWorld('Monorepo')}</Text>
           </View>
           <SignOutButton />
-          <View style={styles.selectedName}>
-            <Text>{activity?.title ?? 'New Task'}</Text>
-          </View>
-          <View style={[styles.container, { flexDirection: "row" }]}>
-            <Text>Id: {activity?.id}</Text>
-          </View>
-          <View style={[styles.container, { flexDirection: "row" }]}>
-            <Text>Name: </Text>
-            <TextInput
-              style={styles.input}
-              value={title}
-              placeholder='Enter a new task...'
-              onChangeText={setTitle}
-            />
-          </View>
-          <Pressable
-            disabled={(title?.length ?? 0) === 0}
-            onPress={onSave}
-            style={styles.button}
-          >
-            <Text>Save</Text>
-          </Pressable>
         </View>
-        <View style={styles.container}>
-          {allActivitys ? allActivitys.map((p) => (
-            <View style={{ flexDirection: "row" }} key={p.id}>
-              <Pressable onPress={() => onSelect(p.id)} style={styles.selectButton}>
-                <Text>Select</Text>
-              </Pressable>
-              <Pressable onPress={() => onDelete(p.id)} style={styles.deleteButton}>
-                <Text>Delete</Text>
-              </Pressable>
-              <View style={styles.itemName}>
-                <Text key={p.id}>{p.title}</Text>
-              </View>
-            </View>
-          )) : null}
-        </View>
-        <View style={styles.container}>
-          <Pressable onPress={onClear} style={styles.button}>
-            <Text>Clear</Text>
-          </Pressable>
-        </View>
+        <TaskList 
+          allActivities={allActivitys} 
+          selectedActivity={activity} 
+          onClear={onClear}
+          onDelete={onDelete}
+          onSave={onSave}
+          onSelect={onSelect}
+        />
       </ScrollView>
     </SafeAreaView>
   );
